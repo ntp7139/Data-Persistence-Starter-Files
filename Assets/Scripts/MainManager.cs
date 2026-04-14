@@ -13,6 +13,7 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public GameObject GameOverText;
     
+    public Text PlayerText;
     private bool m_Started = false;
     private int m_Points;
     
@@ -60,6 +61,7 @@ public class MainManager : MonoBehaviour
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
         }
+        DisplayInfo();
     }
 
     void AddPoint(int point)
@@ -67,10 +69,34 @@ public class MainManager : MonoBehaviour
         m_Points += point;
         ScoreText.text = $"Score : {m_Points}";
     }
-
+    void DisplayInfo()
+    {
+        if (ManageScene.Instance != null)
+        {
+            CheckHighestScore();
+            PlayerText.text = "Player: " + ManageScene.Instance.playerName + "Score: " + ManageScene.Instance.highestScore;
+        }
+    }
     public void GameOver()
     {
         m_GameOver = true;
         GameOverText.SetActive(true);
+        if (ManageScene.Instance != null)
+        {
+            CheckHighestScore();
+        }
+        SaveGame();
+    }
+    public void SaveGame()
+    {
+        if(ManageScene.Instance != null)
+        {
+            CheckHighestScore();
+            ManageScene.Instance.SaveInfo();
+        }
+    }
+    public void CheckHighestScore()
+    {
+        ManageScene.Instance.highestScore = m_Points > ManageScene.Instance.highestScore ? m_Points : ManageScene.Instance.highestScore;
     }
 }
