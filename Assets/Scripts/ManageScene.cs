@@ -14,7 +14,7 @@ public class ManageScene : MonoBehaviour
     {
         if(Instance != null)
         {
-            DontDestroyOnLoad(Instance);
+            Destroy(gameObject);
             return;
         }
         Instance = this;
